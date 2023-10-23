@@ -1,0 +1,56 @@
+.dropzone {
+    border: 2px #cccccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    text-align: center;
+    padding: 20px;
+    cursor: pointer;
+    max-width: 60%;
+    min-width: 60%;
+    margin: 0 auto;
+    margin-top: 30px;
+    border-radius: 10px;
+}
+  
+.dropzone p {
+    font-size: 16px;
+    color: #555555;
+    opacity: 0.7;
+}
+.button-upload {
+    background-color: #5C0029;
+    color: #ffffff;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.button-upload:hover {
+    color: #5C0029;
+    background: linear-gradient(to bottom right, #857C8D, transparent),
+    linear-gradient(to top left, #83C8BC, transparent); 
+    border: 2px solid #5C0029;
+}
+  
+.dropzone.active {
+    border-color: #277fdd !important;
+}
+
+.error-message {
+    color: red;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 12px;
+}
+
+.remove-button {
+    background-color: #ff0000;
+    color: #ffffff; 
+    border: none;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin-left: 15px;
+}
