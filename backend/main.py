@@ -10,13 +10,23 @@ from pathlib import Path
 # http://127.0.0.1:8000/docs
 # http://127.0.0.1:8000/redoc
 # uvicorn backend.main:app --reload
-# lsof -i :3000
 # npm start
 # python3 -m pip install psycopg2-binary
 
 device = ("cuda" if torch.cuda.is_available() else "cpu")
 importModel = neuralNetwork().to(device)
 importModel.load_state_dict(torch.load('backend/model.pth', map_location=torch.device(device)))
+
+from PIL import Image
+from torchvision import transforms
+
+# Define the transformation to be applied to the image
+preprocess = transforms.Compose([
+    transforms.Resize(256),
+    transforms.CenterCrop(224),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+])
 
 app = FastAPI()
 
@@ -29,40 +39,21 @@ async def upload_file(file: UploadFile = File(...)):
         buffer.write(await file.read())
     return JSONResponse(content={"file_path": str(file_path)})
 
-@app.post("/predict")
-async def predict(image: UploadFile = File(...)):
+@app.post("/predict/{file_path:path}")
+async def predict(file_path: str):
     try:
-        # Lisez les données de l'image
-        image_data = await image.read()
+        print(f"Received prediction request for image at path: {file_path}")
+        prediction = torch.softmax(importModel(centerGreyScale(read_image(file_path).to(device))).view(1,-1), dim=1)
+        prediction_list = prediction.tolist()
+        prediction_list = prediction_list[0][0]
 
-        # Effectuez vos opérations sur l'image ici
-
-        # Exemple de retour JSON
-        return {"result": "success"}
-
+        return {"result": "success", "prediction": prediction_list}
     except Exception as e:
         return {"result": "error", "message": str(e)}
 
-"""
-class request_body(BaseModel):
-    sentence : str
-
-@app.post("/predict")
-def predict(request: Request, data: request_body):
-    new_data = [[
-        data.sepal_length,
-        data.sepal_width,
-        data.petal_length,
-        data.petal_width
-    ]]
-    class_idx = loaded_model.predict(new_data)[0]
-    prediction = {'class': iris.target_names[class_idx]}
-
-    return prediction
-"""
-
 app.add_middleware(
     CORSMiddleware,
+    allow_credentials=True,
     allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],

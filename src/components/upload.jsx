@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import "../styles/upload.css";
 import { useDropzone } from 'react-dropzone';
 
-const FileUploader = () => {
+const FileUploader = (props) => {
     const [image, setImage] = useState(null);
     const [error, setError] = useState(null);
+    const [filePath, setFilePath] = useState(null);
 
     const uploadFile = async (formData) => {
         try {
@@ -12,20 +13,24 @@ const FileUploader = () => {
                 method: 'POST',
                 body: formData,
             });
-    
+
             const data = await response.json();
             console.log(data);
+
+            setFilePath(data.file_path); // Stocker le chemin du fichier
         } catch (error) {
             console.error('Erreur :', error);
         }
     };
 
     const onDrop = (acceptedFiles) => {
-        const file = acceptedFiles[0];
-        const formData = new FormData(); // hop
-        formData.append('file', file); // hop
+        props.onPredictionDone(false); // to delete previous prediction
 
-        uploadFile(formData); // hop
+        const file = acceptedFiles[0];
+        const formData = new FormData(); 
+        formData.append('file', file); 
+
+        uploadFile(formData); 
         
         if (file.type === 'image/jpeg' || file.type === 'image/png') {
             const reader = new FileReader();
@@ -56,25 +61,24 @@ const FileUploader = () => {
 
     const handleRemoveImage = () => {
         setImage(null);
+        props.onPredictionDone(false); // we delete the prediction
     };
 
-    const handleSubmit = async (file) => {
+    const handleSubmit = async (file_path) => {
+        console.log('Image Path:', file_path);
         try {
-            const formData = new FormData();
-            formData.append('image', file); // Utilisez le nom approprié ('image' ou celui attendu par votre API)
-    
-            const response = await fetch('http://localhost:8000/predict', {
+            const response = await fetch(`http://localhost:8000/predict/${file_path}`, {
                 method: 'POST',
-                body: formData,
             });
     
             const data = await response.json();
-            console.log(data);
     
             if (data.result === 'success') {
-                console.log(data.message);
+                console.log(data);
+                props.onPredictionChange(Math.round(data.prediction), 2);
+                props.onPredictionDone(true); // we can display the prediction
             } else {
-                console.error('Erreur :', data.message);
+                console.error('Erreur :', data);
             }
         } catch (error) {
             console.error('Erreur :', error);
@@ -82,25 +86,27 @@ const FileUploader = () => {
     };
 
     return (
-        <div className="dropzone">
-            <div {...getRootProps()} style={{ border: '2px dashed #cccccc', borderRadius: '4px', padding: '20px', textAlign: 'center' }}>
-                <input {...getInputProps()} />
-                <p>Drag an image here...</p>
-                <button type="button" onClick={handleButtonClick} className="button-upload">... or upload it from your computer</button>
+        <div>
+            <div className="dropzone">
+                <div {...getRootProps()} style={{ border: '2px dashed #cccccc', borderRadius: '4px', padding: '20px', textAlign: 'center' }}>
+                    <input {...getInputProps()} />
+                    <p>Drag an image here...</p>
+                    <button type="button" onClick={handleButtonClick} className="button-upload">... or upload it from your computer</button>
+                </div>
+                {image && (
+                    <div>
+                        <h4>Uploaded image:</h4>
+                        <img src={image} alt="Uploaded" style={{ maxWidth: '70%', marginTop: '20px' }} />
+                        <button className="remove-button" onClick={handleRemoveImage}>X</button>
+                    </div>
+                )}
+                {error && <div className="error-message">{error}</div>}
+                {filePath && image && (
+                    <div>
+                        <button className="button-upload" onClick={() => handleSubmit(filePath)}>Submit</button>
+                    </div>
+                )}
             </div>
-            {image && (
-                <div>
-                    <h4>Uploaded image:</h4>
-                    <img src={image} alt="Uploaded" style={{ maxWidth: '70%', marginTop: '20px' }} />
-                    <button className="remove-button" onClick={handleRemoveImage}>X</button>
-                </div>
-            )}
-            {error && <div className="error-message">{error}</div>}
-            {image && (
-                <div>
-                    <button className="button-upload" onClick={() => handleSubmit(image)}>Submit</button>
-                </div>
-            )}
         </div>
     );
 };

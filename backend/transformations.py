@@ -19,3 +19,10 @@ class neuralNetwork(nn.Module):
     
     def forward(self, x):
         return self.linear_relu_stack(x)
+
+def centerGreyScale(image):
+    imgRes = torchvision.transforms.Resize(200, antialias=None)(image)
+    imgCC = torchvision.transforms.CenterCrop(198)(imgRes)
+    imgCCGS = torchvision.transforms.Grayscale(num_output_channels=3)(imgCC)
+    imgFlat = imgCCGS.flatten().to(torch.float)
+    return imgFlat

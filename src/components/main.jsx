@@ -7,10 +7,7 @@ import { Result } from "./result";
 const Main = () => {
     return (
       <div style={{display: 'grid', gridTemplateRows: 'auto auto', backgroundColor: 'FFA500'}}>
-        <Navbar />
         
-        <FileUploader />
-        <Result />
         <Footer/>
       </div>
     );
