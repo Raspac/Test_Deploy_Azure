@@ -9,7 +9,7 @@ const FileUploader = (props) => {
 
     const uploadFile = async (formData) => {
         try {
-            const response = await fetch('http://localhost:8000/upload', {
+            const response = await fetch('http://20.199.51.147:8000/upload', {
                 method: 'POST',
                 body: formData,
             });
@@ -67,7 +67,7 @@ const FileUploader = (props) => {
     const handleSubmit = async (file_path) => {
         console.log('Image Path:', file_path);
         try {
-            const response = await fetch(`http://localhost:8000/predict/${file_path}`, {
+            const response = await fetch(`http://20.199.51.147:8000/predict/${file_path}`, {
                 method: 'POST',
             });
     
