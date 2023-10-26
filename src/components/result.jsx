@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Footer } from "./footer";
 import { Navbar } from "./navbar"
 import { FileUploader } from "./upload";
 import "../styles/result.css";
