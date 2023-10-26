@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'DataCampTestGit'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3C5C8254183B48D1A1479C4CCDEB9A5E }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_53E495C85C5B4A03B876AACC1F058208 }}
           package: .
