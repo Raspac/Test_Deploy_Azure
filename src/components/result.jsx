@@ -23,7 +23,7 @@ const Result = () => {
                 <FileUploader onPredictionChange={handlePredictionChange} onPredictionDone={handlePredictionDone} />
                 <div className="prediction-container">
                     <div className="prediction-box">
-                        <h2>{prediction !== null && predictionDone ? (prediction >= 0 && prediction <= 35 ? "Cancer detected" : "No cancer detected") : 'No prediction available'}</h2>
+                        <h2>{prediction !== null && predictionDone ? (prediction >= 0 && prediction <= 0.35 ? "Cancer detected" : "No cancer detected") : 'No prediction available'}</h2>
                     </div>
                 </div>
             </div>
