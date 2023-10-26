@@ -1,14 +1,12 @@
-from fastapi import FastAPI, Request, File, UploadFile
-from typing import Optional
-from pydantic import BaseModel
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-import psycopg2
 from backend.transformations import *
 from fastapi.responses import JSONResponse
 from pathlib import Path
+import torch 
+from torchvision.io import read_image 
+from torchvision import transforms
 
-# http://127.0.0.1:8000/docs
-# http://127.0.0.1:8000/redoc
 # uvicorn backend.main:app --reload
 # npm start
 # python3 -m pip install psycopg2-binary
@@ -17,10 +15,6 @@ device = ("cuda" if torch.cuda.is_available() else "cpu")
 importModel = neuralNetwork().to(device)
 importModel.load_state_dict(torch.load('backend/model.pth', map_location=torch.device(device)))
 
-from PIL import Image
-from torchvision import transforms
-
-# Define the transformation to be applied to the image
 preprocess = transforms.Compose([
     transforms.Resize(256),
     transforms.CenterCrop(224),

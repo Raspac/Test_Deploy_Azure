@@ -96,7 +96,7 @@ const FileUploader = (props) => {
                 {image && (
                     <div>
                         <h4>Uploaded image:</h4>
-                        <img src={image} alt="Uploaded" style={{ maxWidth: '70%', marginTop: '20px' }} />
+                        <img src={image} alt="Uploaded" style={{ maxWidth: '40%', marginTop: '20px', marginBottom: '30px' }} />
                         <button className="remove-button" onClick={handleRemoveImage}>X</button>
                     </div>
                 )}

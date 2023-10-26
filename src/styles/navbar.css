@@ -1,19 +1,48 @@
 nav {
     background-color: #5C0029;
+    display: flex;
+    justify-content: space-between;
+    align-items : center;
+    padding: 0.5rem 1rem;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    padding-top: 0px;
+    padding-bottom: 15px;
 }
+
+.logo {
+    background-image: url('OPTIKNOW.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 450px;
+    height: 59px;
+    position: relative;
+    top: 10px;
+  }
 
 nav ul{
     list-style: none;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 20px;
 }
 
 nav li{
-    margin: 7px 7px;
+    margin: 0px 17px;
 }
 
 nav a {
     text-decoration: none;
-    color: white; /* Couleur du texte */
+    color: white;
+  }
+
+  
+@media (max-width: 600px) {
+    nav {
+      flex-direction: column;
+    }
+    
+    .logo {
+      margin-bottom: 0.5rem;
+    }
   }

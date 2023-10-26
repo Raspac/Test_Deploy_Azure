@@ -21,12 +21,11 @@ const Result = () => {
             <Navbar />
             <div className="result-container">
                 <FileUploader onPredictionChange={handlePredictionChange} onPredictionDone={handlePredictionDone} />
-                <h2>Result {prediction !== null && predictionDone ? prediction : "No prediction"}</h2>
-                {prediction !== null && predictionDone && (
-                    <div className="prediction">
-                        <p>Prediction: {prediction === 1 ? "No Cancer" : "Cancer"}</p>
+                <div className="prediction-container">
+                    <div className="prediction-box">
+                        <h2>{prediction !== null && predictionDone ? (prediction >= 0 && prediction <= 35 ? "Cancer detected" : "No cancer detected") : 'No prediction available'}</h2>
                     </div>
-                )}
+                </div>
             </div>
         </div>
     );
